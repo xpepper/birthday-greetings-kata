@@ -24,7 +24,7 @@ public class SmtpMessageService implements MessageService {
 
         Message message = buildMessage(greetings, session);
 
-        sendMessage(message);
+        Transport.send(message);
     }
 
     private Message buildMessage(Greetings greetings, Session session) throws MessagingException, AddressException {
@@ -41,11 +41,6 @@ public class SmtpMessageService implements MessageService {
         properties.put("mail.smtp.host", host);
         properties.put("mail.smtp.port", "" + port);
         return Session.getInstance(properties, null);
-    }
-
-    // made protected for testing :-(
-    protected void sendMessage(Message msg) throws MessagingException {
-        Transport.send(msg);
     }
 
 }

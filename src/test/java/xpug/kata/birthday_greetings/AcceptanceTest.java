@@ -11,47 +11,48 @@ import org.junit.Test;
 import com.dumbster.smtp.SimpleSmtpServer;
 import com.dumbster.smtp.SmtpMessage;
 
-
 public class AcceptanceTest {
 
-	private static final int NONSTANDARD_PORT = 3003;
-	private SimpleSmtpServer server;
-	private Iterator<SmtpMessage> emailIterator;
+    private static final int NONSTANDARD_PORT = 3003;
+    private SimpleSmtpServer server;
+    private Iterator<SmtpMessage> emailIterator;
 
-	@Before
-	public void setUp() throws Exception {
-		server = SimpleSmtpServer.start(NONSTANDARD_PORT);
-	}
+    @Before
+    public void setUp() throws Exception {
+        server = SimpleSmtpServer.start(NONSTANDARD_PORT);
+    }
 
-	@After
-	public void tearDown() {
-		server.stop();
-	}
+    @After
+    public void tearDown() {
+        server.stop();
+    }
 
-	@Test
-	public void sendGreetings() throws Exception {
-		startBirthdayServiceFor("src/test/resources/employee_data.txt", "2008/10/08");
+    @Test
+    public void sendGreetings() throws Exception {
+        startBirthdayServiceFor("src/test/resources/employee_data.txt", "2008/10/08");
 
-		expectNumberOfEmailSentIs(1);
-		expectEmailWithSubject_andBody_sentTo("Happy Birthday!", "Happy Birthday, dear John!", "john.doe@foobar.com");
-	}
+        expectNumberOfEmailSentIs(1);
+        expectEmailWithSubject_andBody_sentTo("Happy Birthday!", "Happy Birthday, dear John!", "john.doe@foobar.com");
+    }
 
-	private void expectEmailWithSubject_andBody_sentTo(String subject, String body, String recipient) {
-		SmtpMessage message = emailIterator.next();
-		assertEquals(body, message.getBody());
-		assertEquals(subject, message.getHeaderValue("Subject"));
-		assertEquals(recipient, message.getHeaderValue("To"));
-	}
+    private void expectEmailWithSubject_andBody_sentTo(String subject, String body, String recipient) {
+        SmtpMessage message = emailIterator.next();
+        assertEquals(body, message.getBody());
+        assertEquals(subject, message.getHeaderValue("Subject"));
+        assertEquals(recipient, message.getHeaderValue("To"));
+    }
 
-	private void expectNumberOfEmailSentIs(int expected) {
-		assertEquals(expected, server.getReceivedEmailSize());
-	}
+    private void expectNumberOfEmailSentIs(int expected) {
+        assertEquals(expected, server.getReceivedEmailSize());
+    }
 
-	@SuppressWarnings("unchecked")
-	private void startBirthdayServiceFor(String employeeFileName, String date) throws Exception {
-		MessageService messageService = new SmtpMessageService("localhost", NONSTANDARD_PORT);
-        BirthdayService service = new BirthdayService(messageService);
-		service.sendGreetings(employeeFileName, new XDate(date));
-		emailIterator = server.getReceivedEmail();
-	}
+    @SuppressWarnings("unchecked")
+    private void startBirthdayServiceFor(String employeeFileName, String date) throws Exception {
+        MessageService messageService = new SmtpMessageService("localhost", NONSTANDARD_PORT);
+        FileEmployeeRepository employeeRepository = new FileEmployeeRepository(employeeFileName);
+
+        BirthdayService service = new BirthdayService(messageService, employeeRepository);
+        service.sendGreetings(new XDate(date));
+        emailIterator = server.getReceivedEmail();
+    }
 }

@@ -27,13 +27,13 @@ public class AcceptanceForWindowsTest {
             }
         };
 
-        service = new BirthdayService(messageService);
+        service = new BirthdayService(messageService, new FileEmployeeRepository("src/test/resources/employee_data.txt"));
     }
 
     @Test
     public void willSendGreetings_whenItsSomebodysBirthday() throws Exception {
 
-        service.sendGreetings("src/test/resources/employee_data.txt", new XDate("2008/10/08"));
+        service.sendGreetings(new XDate("2008/10/08"));
 
         assertEquals("message not sent?", 1, messagesSent.size());
 
@@ -45,7 +45,7 @@ public class AcceptanceForWindowsTest {
 
     @Test
     public void willNotSendEmailsWhenNobodysBirthday() throws Exception {
-        service.sendGreetings("src/test/resources/employee_data.txt", new XDate("2008/01/01"));
+        service.sendGreetings(new XDate("2008/01/01"));
 
         assertEquals("what? messages?", 0, messagesSent.size());
     }
