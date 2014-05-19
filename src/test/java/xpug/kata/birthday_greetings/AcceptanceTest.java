@@ -49,7 +49,7 @@ public class AcceptanceTest {
 
 	@SuppressWarnings("unchecked")
 	private void startBirthdayServiceFor(String employeeFileName, String date) throws Exception {
-		SmtpMessageService messageService = new SmtpMessageService("localhost", NONSTANDARD_PORT);
+		MessageService messageService = new SmtpMessageService("localhost", NONSTANDARD_PORT);
         BirthdayService service = new BirthdayService(messageService);
 		service.sendGreetings(employeeFileName, new XDate(date));
 		emailIterator = server.getReceivedEmail();

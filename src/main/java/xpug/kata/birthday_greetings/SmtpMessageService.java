@@ -8,7 +8,7 @@ import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
-public class SmtpMessageService {
+public class SmtpMessageService implements MessageService {
 
     private String smtpHost;
     private int smtpPort;
@@ -18,27 +18,29 @@ public class SmtpMessageService {
         this.smtpPort = smtpPort;
     }
 
-    public void sendGreetings(XDate xDate, Employee employee) throws AddressException, MessagingException {
-        Greetings greetings = new Greetings(employee);
-        sendMessage("sender@here.com", greetings);
+    @Override
+    public void send(Greetings greetings) throws AddressException, MessagingException {
+        Session session = createMailSession(smtpHost, smtpPort);
+
+        Message message = buildMessage(greetings, session);
+
+        sendMessage(message);
     }
 
-    private void sendMessage(String sender, Greetings greetings) throws AddressException, MessagingException {
-        // Create a mail session
-        java.util.Properties props = new java.util.Properties();
-        props.put("mail.smtp.host", smtpHost);
-        props.put("mail.smtp.port", "" + smtpPort);
-        Session session = Session.getInstance(props, null);
-
-        // Construct the message
+    private Message buildMessage(Greetings greetings, Session session) throws MessagingException, AddressException {
         Message msg = new MimeMessage(session);
-        msg.setFrom(new InternetAddress(sender));
+        msg.setFrom(new InternetAddress("sender@here.com"));
         msg.setRecipient(Message.RecipientType.TO, new InternetAddress(greetings.getRecipient()));
         msg.setSubject(greetings.getSubject());
         msg.setText(greetings.getMessage());
+        return msg;
+    }
 
-        // Send the message
-        sendMessage(msg);
+    private Session createMailSession(String host, int port) {
+        java.util.Properties properties = new java.util.Properties();
+        properties.put("mail.smtp.host", host);
+        properties.put("mail.smtp.port", "" + port);
+        return Session.getInstance(properties, null);
     }
 
     // made protected for testing :-(

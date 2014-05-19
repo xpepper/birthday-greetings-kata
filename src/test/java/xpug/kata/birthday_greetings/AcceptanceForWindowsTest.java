@@ -3,8 +3,8 @@ package xpug.kata.birthday_greetings;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.mail.Message;
 import javax.mail.MessagingException;
+import javax.mail.internet.AddressException;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -13,20 +13,21 @@ import static org.junit.Assert.assertEquals;
 
 public class AcceptanceForWindowsTest {
 
-    private static final int SMTP_PORT = 25;
-    private List<Message> messagesSent;
+    private List<Greetings> messagesSent;
     private BirthdayService service;
 
     @Before
     public void setUp() throws Exception {
-        messagesSent = new ArrayList<Message>();
+        messagesSent = new ArrayList<Greetings>();
 
-        service = new BirthdayService(new SmtpMessageService("localhost", SMTP_PORT) {
+        MessageService messageService = new MessageService() {
             @Override
-            protected void sendMessage(Message msg) throws MessagingException {
-                messagesSent.add(msg);
+            public void send(Greetings greetings) throws AddressException, MessagingException {
+                messagesSent.add(greetings);
             }
-        });
+        };
+
+        service = new BirthdayService(messageService);
     }
 
     @Test
@@ -35,11 +36,11 @@ public class AcceptanceForWindowsTest {
         service.sendGreetings("src/test/resources/employee_data.txt", new XDate("2008/10/08"));
 
         assertEquals("message not sent?", 1, messagesSent.size());
-        Message message = messagesSent.get(0);
-        assertEquals("Happy Birthday, dear John!", message.getContent());
+
+        Greetings message = messagesSent.get(0);
+        assertEquals("Happy Birthday, dear John!", message.getMessage());
         assertEquals("Happy Birthday!", message.getSubject());
-        assertEquals(1, message.getAllRecipients().length);
-        assertEquals("john.doe@foobar.com", message.getAllRecipients()[0].toString());
+        assertEquals("john.doe@foobar.com", message.getRecipient());
     }
 
     @Test
