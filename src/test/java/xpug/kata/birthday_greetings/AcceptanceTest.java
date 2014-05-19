@@ -22,16 +22,16 @@ public class AcceptanceTest {
 	public void setUp() throws Exception {
 		server = SimpleSmtpServer.start(NONSTANDARD_PORT);
 	}
-	
+
 	@After
 	public void tearDown() {
 		server.stop();
 	}
-	
+
 	@Test
 	public void sendGreetings() throws Exception {
 		startBirthdayServiceFor("src/test/resources/employee_data.txt", "2008/10/08");
-		
+
 		expectNumberOfEmailSentIs(1);
 		expectEmailWithSubject_andBody_sentTo("Happy Birthday!", "Happy Birthday, dear John!", "john.doe@foobar.com");
 	}
@@ -40,7 +40,7 @@ public class AcceptanceTest {
 		SmtpMessage message = emailIterator.next();
 		assertEquals(body, message.getBody());
 		assertEquals(subject, message.getHeaderValue("Subject"));
-		assertEquals(recipient, message.getHeaderValue("To"));		
+		assertEquals(recipient, message.getHeaderValue("To"));
 	}
 
 	private void expectNumberOfEmailSentIs(int expected) {
@@ -49,8 +49,9 @@ public class AcceptanceTest {
 
 	@SuppressWarnings("unchecked")
 	private void startBirthdayServiceFor(String employeeFileName, String date) throws Exception {
-		BirthdayService service = new BirthdayService();
-		service.sendGreetings(employeeFileName, new XDate(date), "localhost", NONSTANDARD_PORT);
+		SmtpMessageService messageService = new SmtpMessageService("localhost", NONSTANDARD_PORT);
+        BirthdayService service = new BirthdayService(messageService);
+		service.sendGreetings(employeeFileName, new XDate(date));
 		emailIterator = server.getReceivedEmail();
 	}
 }
