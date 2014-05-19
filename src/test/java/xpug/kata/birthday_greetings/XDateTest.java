@@ -3,6 +3,8 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import xpug.kata.birthday_greetings.domain.XDate;
+
 
 
 public class XDateTest {

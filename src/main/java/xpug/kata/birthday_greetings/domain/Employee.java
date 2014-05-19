@@ -1,4 +1,4 @@
-package xpug.kata.birthday_greetings;
+package xpug.kata.birthday_greetings.domain;
 
 import java.text.ParseException;
 

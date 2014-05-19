@@ -8,6 +8,12 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import xpug.kata.birthday_greetings.adapter.FileEmployeeRepository;
+import xpug.kata.birthday_greetings.adapter.SmtpMessageService;
+import xpug.kata.birthday_greetings.domain.BirthdayService;
+import xpug.kata.birthday_greetings.domain.MessageService;
+import xpug.kata.birthday_greetings.domain.XDate;
+
 import com.dumbster.smtp.SimpleSmtpServer;
 import com.dumbster.smtp.SmtpMessage;
 

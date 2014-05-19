@@ -1,4 +1,4 @@
-package xpug.kata.birthday_greetings;
+package xpug.kata.birthday_greetings.adapter;
 
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -7,6 +7,9 @@ import javax.mail.Transport;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+
+import xpug.kata.birthday_greetings.domain.Greetings;
+import xpug.kata.birthday_greetings.domain.MessageService;
 
 public class SmtpMessageService implements MessageService {
 

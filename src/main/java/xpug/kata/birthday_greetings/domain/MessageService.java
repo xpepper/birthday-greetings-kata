@@ -1,4 +1,4 @@
-package xpug.kata.birthday_greetings;
+package xpug.kata.birthday_greetings.domain;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.AddressException;

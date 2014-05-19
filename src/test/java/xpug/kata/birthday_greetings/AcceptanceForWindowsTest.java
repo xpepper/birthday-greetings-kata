@@ -9,6 +9,12 @@ import javax.mail.internet.AddressException;
 import org.junit.Before;
 import org.junit.Test;
 
+import xpug.kata.birthday_greetings.adapter.FileEmployeeRepository;
+import xpug.kata.birthday_greetings.domain.BirthdayService;
+import xpug.kata.birthday_greetings.domain.Greetings;
+import xpug.kata.birthday_greetings.domain.MessageService;
+import xpug.kata.birthday_greetings.domain.XDate;
+
 import static org.junit.Assert.assertEquals;
 
 public class AcceptanceForWindowsTest {

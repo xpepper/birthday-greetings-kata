@@ -1,4 +1,4 @@
-package xpug.kata.birthday_greetings;
+package xpug.kata.birthday_greetings.adapter;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -7,6 +7,10 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+
+import xpug.kata.birthday_greetings.domain.Employee;
+import xpug.kata.birthday_greetings.domain.EmployeeRepository;
+import xpug.kata.birthday_greetings.domain.XDate;
 
 public class FileEmployeeRepository implements EmployeeRepository {
 

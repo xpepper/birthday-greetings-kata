@@ -2,6 +2,9 @@ package xpug.kata.birthday_greetings;
 
 import org.junit.Test;
 
+import xpug.kata.birthday_greetings.domain.Employee;
+import xpug.kata.birthday_greetings.domain.Greetings;
+
 import static org.junit.Assert.assertEquals;
 
 public class GreetingsTest {
